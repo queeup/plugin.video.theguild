@@ -12,6 +12,8 @@
              library="addon.py">
     <provides>video</provides>
   </extension>
+  <extension point="xbmc.python.module"
+             library="resources/lib" />
   <extension point="xbmc.addon.metadata">
     <summary>The Guild video plugin</summary>
     <summary lang="tr">The Guild video plugin</summary>
