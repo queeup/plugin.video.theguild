@@ -55,6 +55,7 @@ class Main:
 
   def add_link(self, name, url, iconimage, desc, duration, label):
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    listitem.setProperty('fanart_image', __fanart__)
     listitem.setInfo(type="Video",
                      infoLabels={"Title": name,
                                  "Duration": duration,
@@ -66,6 +67,7 @@ class Main:
 
   def add_dir(self, name):
     listitem = xbmcgui.ListItem(name)
+    listitem.setProperty('fanart_image', __fanart__)
     parameters = '%s?action=list&name=%s' % (sys.argv[0], name)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), parameters, listitem, True)
 
