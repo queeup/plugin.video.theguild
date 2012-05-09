@@ -1,5 +1,11 @@
-The Guild Changelog:
---------------------
+plugin.video.theguild:
+----------------------
+v2.0.0 (09.05.2012)
+-code cleanup with pep8
+-use xbmc.python.module insted of __init__.py
+
+v1.0.6 (17.12.2011)
+-cosmetic
 
 v1.0.5 (29.03.2010)
--other  : Cosmetic
+-cosmetic
