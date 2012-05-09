@@ -1,48 +1,48 @@
 # -*- coding: utf-8 -*-
 
-# Debug
-Debug = False
-
-# plugin constants
-__plugin__ = "The Guild"
-__boxee_author__ = "Jeremy Milum"
-__xbmc_author__ = "queeup"
-__url__ = "http://code.google.com/p/queeup/"
-__date__ = "29.03.2010"
-__version__ = "1.0.5"
-
 # imports
-import urllib, sys, os
-import xbmcplugin, xbmcgui, xbmc
-from resources.lib import theguild
+import sys
+import urllib
+import xbmc
+import xbmcgui
+import xbmcplugin
+import xbmcaddon
+import theguild
 
-# Append Directories
-ROOT_DIR, LIB_DIR = (xbmc.translatePath(os.path.join(os.getcwd(), '')),
-                     xbmc.translatePath(os.path.join(os.getcwd(), 'resources', 'lib')))
-sys.path.append (ROOT_DIR)
-sys.path.append (LIB_DIR)
+# Debug
+DEBUG = False
+
+__addon__ = xbmcaddon.Addon(id='plugin.video.theguild')
+__info__ = __addon__.getAddonInfo
+__plugin__ = __info__('name')
+__version__ = __info__('version')
+__icon__ = __info__('icon')
+__fanart__ = __info__('fanart')
 
 # Fanart
-xbmcplugin.setPluginFanart(int(sys.argv[1]), ROOT_DIR + 'fanart.jpg')
+xbmcplugin.setPluginFanart(int(sys.argv[1]), __fanart__)
 
 shows = theguild.get_theguild()
+
 
 class Main:
   def __init__(self):
     if ('action=list' in sys.argv[2]):
-      self.list(self.Arguments('name'))
+      self.list_contents(self.arguments('name'))
     else:
-      self.start()
+      self.main_menu()
 
-  def start(self):
-    if Debug: self.LOG(description='List available directories.')
+  def main_menu(self):
+    if DEBUG:
+      self.LOG('List available directories.')
     for season in sorted(shows.keys()):
       name = str(season)
-      self.addDir(name)
+      self.add_dir(name)
     xbmcplugin.endOfDirectory(int(sys.argv[1]), True)
 
-  def list(self, name):
-    self.LOG(description='List available episodes.')
+  def list_contents(self, name):
+    if DEBUG:
+      self.LOG('List available episodes.')
     for video in shows[name]:
       _label = str(video.title)
       _title = str(video.title)
@@ -50,33 +50,31 @@ class Main:
       _thumbnail = str(video.thumb_path)
       _url = str(video.video_path)
       _duration = str(video.duration)
-      self.addLink(_title, _url, _thumbnail, _description, _duration, _label)
+      self.add_link(_title, _url, _thumbnail, _description, _duration, _label)
     xbmcplugin.endOfDirectory(int(sys.argv[1]), True)
 
-  def addLink(self, name, url, iconimage, desc, duration, label):
+  def add_link(self, name, url, iconimage, desc, duration, label):
     listitem = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     listitem.setInfo(type="Video",
                      infoLabels={"Title": name,
                                  "Duration": duration,
                                  "Plot": desc,
                                  "Label": label,
-                                 'tvshowtitle' : __plugin__, })
+                                 'tvshowtitle': __plugin__})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, False)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 
-  def addDir(self, name):
+  def add_dir(self, name):
     listitem = xbmcgui.ListItem(name)
     parameters = '%s?action=list&name=%s' % (sys.argv[0], name)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), parameters, listitem, True)
 
-  def Arguments(self, arg):
-    Arguments = dict(part.split('=') for part in sys.argv[2][1:].split('&'))
-    return urllib.unquote_plus(Arguments[arg])
+  def arguments(self, arg):
+    _arguments = dict(part.split('=') for part in sys.argv[2][1:].split('&'))
+    return urllib.unquote_plus(_arguments[arg])
 
-  def LOG(self, plugin=__plugin__, version=__version__, description=''):
-    xbmc.log("\t[PLUGIN] '%s: version %s' initialized!\n\t\t '%s'" % \
-            (plugin, version, description), xbmc.LOGNOTICE)
-
+  def log(self, description):
+    xbmc.log("[ADD-ON] '%s v%s': %s" % (__plugin__, __version__, description), xbmc.LOGNOTICE)
 
 if (__name__ == '__main__'):
   Main()
