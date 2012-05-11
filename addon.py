@@ -34,7 +34,7 @@ class Main:
 
   def main_menu(self):
     if DEBUG:
-      self.LOG('List available directories.')
+      self.log('List available directories.')
     for season in sorted(shows.keys()):
       name = str(season)
       self.add_dir(name)
@@ -42,7 +42,7 @@ class Main:
 
   def list_contents(self, name):
     if DEBUG:
-      self.LOG('List available episodes.')
+      self.log('List available episodes.')
     for video in shows[name]:
       _label = str(video.title)
       _title = str(video.title)
