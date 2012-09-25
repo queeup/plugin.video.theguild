@@ -3,6 +3,7 @@
 # imports
 import sys
 import urllib
+import time
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -49,7 +50,7 @@ class Main:
       _description = str(video.description.encode('utf-8'))
       _thumbnail = str(video.thumb_path)
       _url = str(video.video_path)
-      _duration = str(video.duration)
+      _duration = str(time.strftime('%M:%S', time.gmtime(video.duration)))
       self.add_link(_title, _url, _thumbnail, _description, _duration, _label)
     xbmcplugin.endOfDirectory(int(sys.argv[1]), True)
 
